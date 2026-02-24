@@ -17,4 +17,13 @@ public class UserService {
     public Double checkBankBalance(String username){
         return userRepository.checkBankBalance(username);
     }
+    public boolean checkPass(String username , String pass){
+        return userRepository.checkPass(username,pass);
+    }
+    public void updateBalance(String username, double balance){
+        userRepository.updateBalance(username , balance);
+    }
+    public User getUser(String userId){
+        return userRepository.getUser(userId);
+    }
 }

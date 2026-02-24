@@ -55,11 +55,24 @@ public class Main {
         System.out.println("Welcome " + user.getUsername());
         boolean flag = true;
         while (flag) {
-            System.out.println("1. Check Bank Balance\n2. Withdraw Amount\n3. Deposit Amount\n4. Exit");
+            System.out.println("1. Check Bank Balance\n2. Withdraw Amount\n3. Deposit Amount\n4. Fund Transfer\n5. Exit");
             int selectedChoice = sc.nextInt();
             switch (selectedChoice) {
                 case 1:
                     main.checkBankBalance(user.getUsername());
+                    break;
+                case 2:
+                    main.withdrawAmount(user.getUsername());
+                    break;
+                case 3:
+                    main.depositAmount(user.getUsername());
+                    break;
+                case 4:
+                    main.fundTransfer(user.getUsername());
+                    break;
+                case 5:
+                    flag=false;
+                    break;
             }
         }
     }
@@ -84,5 +97,58 @@ public class Main {
         }
         else System.out.println("Check the username");
     }
+    private void withdrawAmount(String username){
+        System.out.println("Enter amount to withdraw :");
+        double amt=sc.nextDouble();
+        System.out.println("Enter password");
+        String pass=sc.next();
+        Double balance=userService.checkBankBalance(username);
+
+        if(amt <= balance && userService.checkPass(username, pass)){
+            balance=amt-balance;
+            System.out.println("Withdraw Successful");
+            userService.updateBalance(username,balance);
+        }
+        else if(amt>balance) {
+            System.out.println("Insufficient balance");
+        }
+        else {
+            System.out.println("Wrong Password");
+        }
+    }
+    private void depositAmount(String username){
+        System.out.println("Enter amount to deposit");
+        double amt=sc.nextDouble();
+        Double Balance= userService.checkBankBalance(username);
+        Balance=Balance+amt;
+        userService.updateBalance(username,Balance);
+        System.out.println("Amount Deposited");
+    }
+    private void fundTransfer(String username){
+        System.out.println("Enter payee ID : ");
+        String userId=sc.next();
+        User user=getUser(userId);
+        if(user!=null){
+            System.out.println("Enter amount to transfer");
+            double amt=sc.nextDouble();
+            double userBalance= userService.checkBankBalance(username);
+            double payerBalance=userService.checkBankBalance(userId);
+            if(amt <= userBalance){
+                userService.updateBalance(username,userBalance-amt);
+                userService.updateBalance(userId,payerBalance+amt);
+                System.out.println("Funds Transferred Successfully");
+            }
+            else {
+                System.out.println("Insufficient Bank Balance "+userBalance);
+            }
+        }
+        else {
+            System.out.println("Invalid Username");
+        }
+    }
+    private User getUser(String userId){
+        return userService.getUser(userId);
+    }
+
 
 }

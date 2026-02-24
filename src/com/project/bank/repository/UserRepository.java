@@ -42,4 +42,21 @@ public class UserRepository {
         }
         return null;
     }
+    public boolean checkPass(String username, String pass){
+        for(User user:users){
+            if(user.getUsername().equals(username) && user.getPassword().equals(pass))return true;
+        }
+        return false;
+    }
+    public void updateBalance(String username, double balance){
+        for(User user:users){
+            if(user.getUsername().equals(username)){
+                user.setAccountBalance(balance);
+            }
+        }
+    }
+    public User getUser(String userId){
+        for(User user: users) if (user.getUsername().equals(userId)) return user;
+        return null;
+    }
 }
