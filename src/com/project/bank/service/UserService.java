@@ -4,6 +4,7 @@ import com.project.bank.entity.User;
 import com.project.bank.repository.UserRepository;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 
 public class UserService {
     private final UserRepository userRepository =new UserRepository();
@@ -33,5 +34,11 @@ public class UserService {
     }
     public void addTransaction(LocalDate transactionDate,String transactionUserId,double transactionAmount,double initBalance,double finalBalance,String type){
         userRepository.addTransaction(transactionDate,transactionUserId,transactionAmount,initBalance,finalBalance,type);
+    }
+    public void raiseChequebookRequest(String username){
+        userRepository.raiseChequebookRequest(username);
+    }
+    public HashMap<String,Boolean> getAllRequests(){
+        return userRepository.getAllRequests();
     }
 }

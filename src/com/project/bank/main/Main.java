@@ -4,6 +4,7 @@ import com.project.bank.entity.Transaction;
 import com.project.bank.entity.User;
 import com.project.bank.service.UserService;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -32,7 +33,7 @@ public class Main {
         System.out.println("Welcome Admin");
         boolean flag = true;
         while (flag) {
-            System.out.println("1. Create Customer\n2. View Users\n3. Exit");
+            System.out.println("1. Create Customer\n2. View Users\n3. See all Transactions\n4. Exit");
             int selectedChoice = sc.nextInt();
             switch (selectedChoice) {
                 case 1:
@@ -42,6 +43,10 @@ public class Main {
                     userService.printUsers();
                     break;
                 case 3:
+                    System.out.println("Enter userId :");
+                    userService.checkTransactions(sc.next());
+                    break;
+                case 4:
                     flag = false;
                     System.out.println("Logged out Successfully...");
                     break;
@@ -56,7 +61,7 @@ public class Main {
         System.out.println("Welcome " + user.getUsername());
         boolean flag = true;
         while (flag) {
-            System.out.println("1. Check Bank Balance\n2. Withdraw Amount\n3. Deposit Amount\n4. Fund Transfer\n5. Check Transaction History\n6. Exit");
+            System.out.println("1. Check Bank Balance\n2. Withdraw Amount\n3. Deposit Amount\n4. Fund Transfer\n5. Check Transaction History\n6. Raise Chequebook Request \n7. Exit");
             int selectedChoice = sc.nextInt();
             switch (selectedChoice) {
                 case 1:
@@ -75,6 +80,9 @@ public class Main {
                     userService.checkTransactions(user.getUsername());
                     break;
                 case 6:
+                    main.raiseChequebookRequest(user.getUsername());
+                    break;
+                case 7:
                     flag=false;
                     break;
             }
@@ -139,7 +147,6 @@ public class Main {
             double userBalance= userService.checkBankBalance(username);
             double payerBalance=userService.checkBankBalance(userId);
             if(amt <= userBalance){
-
                 double finalBalance=userBalance-amt;
                 userService.addTransaction(LocalDate.now(),username ,amt,userBalance,finalBalance,"debit");
                 userService.addTransaction(LocalDate.now(),userId ,amt,payerBalance,payerBalance+amt,"credit");
@@ -150,16 +157,28 @@ public class Main {
             else {
                 System.out.println("Insufficient Bank Balance "+userBalance);
             }
-
         }
         else {
             System.out.println("Invalid Username");
         }
     }
+    private void raiseChequebookRequest(String username){
+        HashMap<String,Boolean> map=getAllRequests();
+        if(map.containsKey(username) && map.get(username)){
+            System.out.println("Request already raised and is approved");
+        }
+        else if(map.containsKey(username) && !map.get(username)){
+            System.out.println("Request already raised and status is pending");
+        }
+        else{
+            userService.raiseChequebookRequest(username);
+            System.out.println("Request raised Successfully");
+        }
+    }
+    private HashMap<String,Boolean> getAllRequests(){
+        return userService.getAllRequests();
+    }
     private User getUser(String userId){
         return userService.getUser(userId);
     }
-
-
-
 }

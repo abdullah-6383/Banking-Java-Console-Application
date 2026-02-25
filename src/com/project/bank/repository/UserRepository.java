@@ -4,12 +4,14 @@ import com.project.bank.entity.Transaction;
 import com.project.bank.entity.User;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 public class UserRepository {
-    static  Set<User> users=new HashSet<>();
-    static Set<Transaction> transactions=new HashSet<>();
+    private static final Set<User> users=new HashSet<>();
+    private  static final  Set<Transaction> transactions=new HashSet<>();
+    HashMap<String,Boolean> chequebookRequests =new HashMap<>();
     static {
         User user1= new User("admin","admin","1234567","admin",0);
         User user2= new User("user2","user2","12345678","user",500);
@@ -77,5 +79,13 @@ public class UserRepository {
     public void addTransaction(LocalDate transactionDate, String transactionUserId, double transactionAmount, double initBalance, double finalBalance, String type){
         Transaction transaction=new Transaction(transactionDate,transactionUserId,transactionAmount,initBalance,finalBalance,type);
         transactions.add(transaction);
+    }
+    public void raiseChequebookRequest(String username){
+        chequebookRequests.put(username,false);
+
+    }
+
+    public HashMap<String, Boolean> getAllRequests() {
+        return chequebookRequests;
     }
 }
