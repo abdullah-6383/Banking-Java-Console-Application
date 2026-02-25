@@ -3,10 +3,15 @@ package com.project.bank.service;
 import com.project.bank.entity.User;
 import com.project.bank.repository.UserRepository;
 
+import java.time.LocalDate;
+
 public class UserService {
     private final UserRepository userRepository =new UserRepository();
     public  void printUsers(){
         userRepository.printUsers();
+    }
+    public void checkTransactions(String username){
+        userRepository.checkTransactions(username);
     }
     public User login(String username, String password){
         return  userRepository.login(username,password);
@@ -25,5 +30,8 @@ public class UserService {
     }
     public User getUser(String userId){
         return userRepository.getUser(userId);
+    }
+    public void addTransaction(LocalDate transactionDate,String transactionUserId,double transactionAmount,double initBalance,double finalBalance,String type){
+        userRepository.addTransaction(transactionDate,transactionUserId,transactionAmount,initBalance,finalBalance,type);
     }
 }

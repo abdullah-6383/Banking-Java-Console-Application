@@ -1,14 +1,15 @@
 package com.project.bank.repository;
 
+import com.project.bank.entity.Transaction;
 import com.project.bank.entity.User;
 
+import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class UserRepository {
     static  Set<User> users=new HashSet<>();
+    static Set<Transaction> transactions=new HashSet<>();
     static {
         User user1= new User("admin","admin","1234567","admin",0);
         User user2= new User("user2","user2","12345678","user",500);
@@ -21,6 +22,20 @@ public class UserRepository {
         for(User user: users){
             if(user.getRole().equals("admin"))continue;
             System.out.println("Username :"+user.getUsername()+" || Password :"+user.getPassword()+" || Contact Number :"+user.getContactNo()+" || Account Balance :"+user.getAccountBalance());
+        }
+    }
+    public void checkTransactions(String username){
+        for(Transaction transaction: transactions){
+            if(transaction.transactionUserId().equals(username)){
+                System.out.println("Transaction{" +
+                        "transactionDate=" + transaction.transactionDate() +
+                        ", transactionUserId='" + transaction.transactionUserId() + '\'' +
+                        ", transactionAmount=" + transaction.transactionAmount() +
+                        ", initialBalance=" + transaction.initialBalance() +
+                        ", finalBalance=" + transaction.finalBalance() +
+                        ", transactionType='" + transaction.transactionType() + '\'' +
+                        '}');
+            }
         }
     }
     public User login(String username,String password){
@@ -58,5 +73,9 @@ public class UserRepository {
     public User getUser(String userId){
         for(User user: users) if (user.getUsername().equals(userId)) return user;
         return null;
+    }
+    public void addTransaction(LocalDate transactionDate, String transactionUserId, double transactionAmount, double initBalance, double finalBalance, String type){
+        Transaction transaction=new Transaction(transactionDate,transactionUserId,transactionAmount,initBalance,finalBalance,type);
+        transactions.add(transaction);
     }
 }

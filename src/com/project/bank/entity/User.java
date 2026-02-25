@@ -75,12 +75,4 @@ public class User {
         User user = (User) o;
         return Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(contactNo, user.contactNo);
     }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hashCode(username);
-        result = 31 * result + Objects.hashCode(password);
-        result = 31 * result + Objects.hashCode(contactNo);
-        return result;
-    }
 }

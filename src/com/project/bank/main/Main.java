@@ -1,8 +1,9 @@
 package com.project.bank.main;
 
+import com.project.bank.entity.Transaction;
 import com.project.bank.entity.User;
 import com.project.bank.service.UserService;
-
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
@@ -55,7 +56,7 @@ public class Main {
         System.out.println("Welcome " + user.getUsername());
         boolean flag = true;
         while (flag) {
-            System.out.println("1. Check Bank Balance\n2. Withdraw Amount\n3. Deposit Amount\n4. Fund Transfer\n5. Exit");
+            System.out.println("1. Check Bank Balance\n2. Withdraw Amount\n3. Deposit Amount\n4. Fund Transfer\n5. Check Transaction History\n6. Exit");
             int selectedChoice = sc.nextInt();
             switch (selectedChoice) {
                 case 1:
@@ -71,6 +72,9 @@ public class Main {
                     main.fundTransfer(user.getUsername());
                     break;
                 case 5:
+                    userService.checkTransactions(user.getUsername());
+                    break;
+                case 6:
                     flag=false;
                     break;
             }
@@ -97,6 +101,7 @@ public class Main {
         }
         else System.out.println("Check the username");
     }
+
     private void withdrawAmount(String username){
         System.out.println("Enter amount to withdraw :");
         double amt=sc.nextDouble();
@@ -134,13 +139,18 @@ public class Main {
             double userBalance= userService.checkBankBalance(username);
             double payerBalance=userService.checkBankBalance(userId);
             if(amt <= userBalance){
-                userService.updateBalance(username,userBalance-amt);
+
+                double finalBalance=userBalance-amt;
+                userService.addTransaction(LocalDate.now(),username ,amt,userBalance,finalBalance,"debit");
+                userService.addTransaction(LocalDate.now(),userId ,amt,payerBalance,payerBalance+amt,"credit");
+                userService.updateBalance(username, finalBalance);
                 userService.updateBalance(userId,payerBalance+amt);
                 System.out.println("Funds Transferred Successfully");
             }
             else {
                 System.out.println("Insufficient Bank Balance "+userBalance);
             }
+
         }
         else {
             System.out.println("Invalid Username");
@@ -149,6 +159,7 @@ public class Main {
     private User getUser(String userId){
         return userService.getUser(userId);
     }
+
 
 
 }
