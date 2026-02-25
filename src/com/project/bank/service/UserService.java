@@ -41,4 +41,7 @@ public class UserService {
     public HashMap<String,Boolean> getAllRequests(){
         return userRepository.getAllRequests();
     }
+    public void approveRequest(String username){
+        userRepository.approveRequest(username);
+    }
 }

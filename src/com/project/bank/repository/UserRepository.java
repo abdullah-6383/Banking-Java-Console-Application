@@ -6,6 +6,7 @@ import com.project.bank.entity.User;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class UserRepository {
@@ -25,6 +26,9 @@ public class UserRepository {
             if(user.getRole().equals("admin"))continue;
             System.out.println("Username :"+user.getUsername()+" || Password :"+user.getPassword()+" || Contact Number :"+user.getContactNo()+" || Account Balance :"+user.getAccountBalance());
         }
+    }
+    public void approveRequest(String username){
+        chequebookRequests.put(username, true);
     }
     public void checkTransactions(String username){
         for(Transaction transaction: transactions){
@@ -88,4 +92,5 @@ public class UserRepository {
     public HashMap<String, Boolean> getAllRequests() {
         return chequebookRequests;
     }
+
 }

@@ -5,6 +5,7 @@ import com.project.bank.entity.User;
 import com.project.bank.service.UserService;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -33,7 +34,7 @@ public class Main {
         System.out.println("Welcome Admin");
         boolean flag = true;
         while (flag) {
-            System.out.println("1. Create Customer\n2. View Users\n3. See all Transactions\n4. Exit");
+            System.out.println("1. Create Customer\n2. View Users\n3. See all Transactions\n4. View and Approve Chequebook Requests\n5. Exit");
             int selectedChoice = sc.nextInt();
             switch (selectedChoice) {
                 case 1:
@@ -47,6 +48,10 @@ public class Main {
                     userService.checkTransactions(sc.next());
                     break;
                 case 4:
+                    main.viewRequests();
+                    main.approveRequest();
+                    break;
+                case 5:
                     flag = false;
                     System.out.println("Logged out Successfully...");
                     break;
@@ -180,5 +185,17 @@ public class Main {
     }
     private User getUser(String userId){
         return userService.getUser(userId);
+    }
+    private void viewRequests(){
+        HashMap<String,Boolean> requests = getAllRequests();
+        System.out.println("UserId       "+ "Status");
+        for (Map.Entry<String,Boolean> entry : requests.entrySet()){
+            System.out.println(entry.getKey() +"        "+entry.getValue());
+        }
+    }
+    private void approveRequest(){
+        System.out.println("Enter userID to approve request");
+        String username=sc.next();
+        userService.approveRequest(username);
     }
 }
